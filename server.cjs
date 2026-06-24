@@ -3,6 +3,8 @@ const hp = require("@hocuspocus/server");
 // 1. Find the exported Server class defensively, regardless of how Node wrapped it
 const ServerClass = hp.Server || hp.Hocuspocus || (hp.default && hp.default.Server);
 
+const PORT = process.env.PORT || 1234;
+
 async function launch() {
   try {
     // 2. Initialize the server dynamically based on available static methods
