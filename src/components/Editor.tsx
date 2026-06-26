@@ -43,12 +43,12 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
       color: myColor,
     });
 
-    provider.on("status", (event: { status: string }) => {
+    provider!.on("status", (event: { status: string }) => {
       console.log(`Network Status: ${event.status}`);
     });
 
     const ytext = ydoc.getText("quill");
-    const binding = new QuillBinding(ytext, quill, provider.awareness);
+    new QuillBinding(ytext, quill, provider.awareness!);
 
     isInitialized.current = true;
 
