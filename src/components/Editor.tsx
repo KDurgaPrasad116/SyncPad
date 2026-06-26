@@ -33,9 +33,9 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
 
     const ydoc = new Y.Doc();
     const provider = new HocuspocusProvider({
-  url: import.meta.env.VITE_WS_URL || "ws://localhost:1234",
-  name: "your-room-name",
-});
+      url: import.meta.env.VITE_WS_URL || "ws://localhost:1234",
+      name: "secure-workspace-" + roomCode, // Fixed: Now uses the actual room code!
+    });
 
     // We now broadcast the actual userName instead of the random Guest string
     provider.awareness.setLocalStateField("user", {
@@ -48,12 +48,15 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     });
 
     const ytext = ydoc.getText("quill");
-    new QuillBinding(ytext, quill, provider.awareness!);
+    
+    // Fixed: Save the binding to a variable so we can destroy it later
+    const binding = new QuillBinding(ytext, quill, provider.awareness!); 
 
     isInitialized.current = true;
 
     return () => {
-      const binding.destroy();
+      // Fixed: Removed 'const' so this is a valid method call
+      binding.destroy(); 
       provider.destroy();
       ydoc.destroy();
     };
