@@ -38,7 +38,7 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     });
 
     // We now broadcast the actual userName instead of the random Guest string
-    provider.awareness.setLocalStateField("user", {
+    provider.awareness!.setLocalStateField("user", {
       name: userName,
       color: myColor,
     });
