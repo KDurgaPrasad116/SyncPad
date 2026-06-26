@@ -53,7 +53,7 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     isInitialized.current = true;
 
     return () => {
-      binding.destroy();
+      const binding.destroy();
       provider.destroy();
       ydoc.destroy();
     };
