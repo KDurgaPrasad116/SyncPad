@@ -35,6 +35,7 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     const provider = new HocuspocusProvider({
       url: import.meta.env.VITE_WS_URL || "ws://localhost:1234",
       name: "secure-workspace-" + roomCode, // Fixed: Now uses the actual room code!
+      document: ydoc,
     });
 
     // We now broadcast the actual userName instead of the random Guest string
