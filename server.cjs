@@ -1,8 +1,8 @@
 const { Server } = require("@hocuspocus/server");
 
-const server = Server.configure({
+const server = new Server({
   // Use Render's dynamically assigned PORT, or fallback to 1234 locally
-  port: process.env.PORT || 1234,
+  port: process.env.PORT ? Number(process.env.PORT) : 1234,
 });
 
 server.listen();
