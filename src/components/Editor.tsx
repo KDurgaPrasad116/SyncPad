@@ -32,7 +32,6 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     });
 
     const ydoc = new Y.Doc();
-
     const provider = new HocuspocusProvider({
   url: import.meta.env.VITE_WS_URL || "ws://localhost:1234",
   name: "your-room-name",
