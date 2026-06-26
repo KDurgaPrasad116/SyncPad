@@ -34,10 +34,9 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     const ydoc = new Y.Doc();
 
     const provider = new HocuspocusProvider({
-      url: "ws://localhost:1234",
-      name: `secure-workspace-${roomCode}`,
-      document: ydoc,
-    });
+  url: import.meta.env.VITE_WS_URL || "ws://localhost:1234",
+  name: "your-room-name",
+});
 
     // We now broadcast the actual userName instead of the random Guest string
     provider.awareness.setLocalStateField("user", {
