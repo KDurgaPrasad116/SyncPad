@@ -107,55 +107,66 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
   };
 
   const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-  
-      // ADD THIS ERROR LISTENER
-      mediaRecorder.onerror = (event) => {
-        console.error("MediaRecorder Error:", event);
-        alert("Recording error: " + event.name); 
-      };
-  
-      mediaRecorderRef.current = mediaRecorder;
-      // ... rest of your code
-    } catch (error) {
-      console.error("Microphone Access Error:", error);
-      alert("Check microphone permissions! Error: " + error.message);
-    }
-  };
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = () => {
-          if (chatArrayRef.current) {
-            chatArrayRef.current.push([{
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
+
+    const mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.onerror = (event) => {
+      console.error("MediaRecorder Error:", event);
+      alert("Recording error.");
+    };
+
+    mediaRecorderRef.current = mediaRecorder;
+
+    audioChunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: "audio/webm",
+      });
+
+      const reader = new FileReader();
+
+      reader.readAsDataURL(audioBlob);
+
+      reader.onloadend = () => {
+        if (chatArrayRef.current) {
+          chatArrayRef.current.push([
+            {
               id: Date.now().toString(),
               sender: userName,
               type: "audio",
               content: reader.result,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-          }
-        };
-        stream.getTracks().forEach(track => track.stop());
+              timestamp: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            },
+          ]);
+        }
       };
 
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      alert("Could not access microphone.");
-    }
-  };
+      stream.getTracks().forEach((track) => track.stop());
+    };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
+    mediaRecorder.start();
+
+    setIsRecording(true);
+  } catch (error) {
+    console.error("Microphone Access Error:", error);
+
+    alert("Could not access microphone.");
+  }
+};
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
