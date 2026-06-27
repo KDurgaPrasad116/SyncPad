@@ -110,13 +110,20 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+  
+      // ADD THIS ERROR LISTENER
+      mediaRecorder.onerror = (event) => {
+        console.error("MediaRecorder Error:", event);
+        alert("Recording error: " + event.name); 
       };
-
+  
+      mediaRecorderRef.current = mediaRecorder;
+      // ... rest of your code
+    } catch (error) {
+      console.error("Microphone Access Error:", error);
+      alert("Check microphone permissions! Error: " + error.message);
+    }
+  };
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         const reader = new FileReader();
