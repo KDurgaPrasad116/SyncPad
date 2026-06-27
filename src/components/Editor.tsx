@@ -46,13 +46,13 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     
     // Removed import.meta.env to prevent the [WARNING] in older ES2015 build targets.
     // When you are ready to deploy, manually swap this to your wss:// Render URL!
-    const WS_URL = "ws://localhost:1234";
+   const wsUrl = import.meta.env.VITE_WS_URL ?? "ws://localhost:1234";
 
-    const provider = new HocuspocusProvider({
-      url: WS_URL,
-      name: "secure-workspace-" + roomCode,
-      document: ydoc,
-    });
+  const provider = new HocuspocusProvider({
+    url: wsUrl,
+    name: `secure-workspace-${roomCode}`,
+    document: ydoc,
+});
 
     // Set our own user information in the awareness state
     provider.awareness!.setLocalStateField("user", {
