@@ -107,66 +107,49 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
   };
 
   const startRecording = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
 
-    const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
+      };
 
-    mediaRecorder.onerror = (event) => {
-      console.error("MediaRecorder Error:", event);
-      alert("Recording error.");
-    };
-
-    mediaRecorderRef.current = mediaRecorder;
-
-    audioChunksRef.current = [];
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        audioChunksRef.current.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: "audio/webm",
-      });
-
-      const reader = new FileReader();
-
-      reader.readAsDataURL(audioBlob);
-
-      reader.onloadend = () => {
-        if (chatArrayRef.current) {
-          chatArrayRef.current.push([
-            {
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = () => {
+          if (chatArrayRef.current) {
+            chatArrayRef.current.push([{
               id: Date.now().toString(),
               sender: userName,
               type: "audio",
               content: reader.result,
-              timestamp: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-            },
-          ]);
-        }
+              timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            }]);
+          }
+        };
+        stream.getTracks().forEach((track) => track.stop());
       };
 
-      stream.getTracks().forEach((track) => track.stop());
-    };
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Microphone Access Error:", error);
+      alert("Could not access microphone.");
+    }
+  };
 
-    mediaRecorder.start();
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
-    setIsRecording(true);
-  } catch (error) {
-    console.error("Microphone Access Error:", error);
-
-    alert("Could not access microphone.");
-  }
-};
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
