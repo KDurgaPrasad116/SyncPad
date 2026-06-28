@@ -64,16 +64,21 @@ export default function AudioPlayer({
 
   return (
     <div
-      style={{
+        style={{
         display: "flex",
         alignItems: "center",
         gap: "12px",
-        padding: "10px",
-        borderRadius: "14px",
+        padding: "12px",
+        borderRadius: "16px",
         marginTop: "6px",
         background: isOwnMessage ? "#005fd4" : "#f1f3f5",
-        width: "250px",
-      }}
+
+        width: "100%",
+        minWidth: "280px",
+        maxWidth: "340px",
+
+        boxSizing: "border-box",
+    }}
     >
       <button
         onClick={togglePlay}
