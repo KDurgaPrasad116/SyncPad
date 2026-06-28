@@ -5,6 +5,7 @@ import * as Y from "yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { QuillBinding } from "y-quill";
 import QuillCursors from "quill-cursors";
+import AudioPlayer from "./AudioPlayer";
 
 Quill.register("modules/cursors", QuillCursors);
 
@@ -320,7 +321,7 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
                       📄 Download {msg.fileName}
                     </a>
                   ) : msg.type === "audio" ? (
-                    <audio controls src={msg.content} style={{ height: "35px", width: "100%", maxWidth: "220px", marginTop: "4px" }} />
+                    <AudioPlayer src={msg.content} isOwnMessage={msg.sender === userName} />
                   ) : (
                     <div>
                       <div style={{ wordBreak: "break-word" }}>
