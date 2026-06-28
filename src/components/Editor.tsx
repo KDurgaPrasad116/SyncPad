@@ -24,7 +24,7 @@ const EDITOR_STYLES = `
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
-    height: 100dvh; 
+    height: 100dvh; npm
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -210,12 +210,12 @@ export default function Editor({ roomCode, userName }: { roomCode: string, userN
     });
 
     const ydoc = new Y.Doc();
+    const wsUrl = import.meta.env.VITE_WS_URL ?? "ws://localhost:1234";
     const provider = new HocuspocusProvider({
-      url: "ws://localhost:1234",
+      url: wsUrl,
       name: `secure-workspace-${roomCode}`,
       document: ydoc,
     });
-
     provider.awareness!.setLocalStateField("user", { name: userName, color: myColor });
 
     const updateUsers = () => {
