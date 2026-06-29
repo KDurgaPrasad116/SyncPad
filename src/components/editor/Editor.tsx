@@ -3,7 +3,6 @@ import useChat from "../../hooks/useChat";
 import "quill/dist/quill.snow.css";
 import "../../styles/editor.css";
 import "../../styles/chat.css";
-import "../../styles/mobile.css";
 import MobileTabs from "../layout/MobileTabs"; 
 // Hooks
 import useAudioRecorder from "../../hooks/useAudioRecorder";
