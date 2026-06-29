@@ -1,22 +1,16 @@
 import { useEffect, useRef } from "react";
 import Quill from "quill";
 import { createCollaborationSession } from "../services/collaboration.service";
-
 import type { ActiveUser } from "../types/chat";
 
 interface Props {
   roomCode: string;
   userName: string;
   color: string;
-
-  containerRef: React.RefObject<HTMLDivElement | null >;
-
+  containerRef: React.RefObject<HTMLDivElement | null>;
   setMessages: React.Dispatch<React.SetStateAction<any[]>>;
   chatArrayRef: React.MutableRefObject<any>;
-
-  setActiveUsers: React.Dispatch<
-    React.SetStateAction<ActiveUser[]>
-  >;
+  setActiveUsers: React.Dispatch<React.SetStateAction<ActiveUser[]>>;
 }
 
 export default function useCollaborativeEditor({
@@ -26,12 +20,12 @@ export default function useCollaborativeEditor({
   containerRef,
   setMessages,
   chatArrayRef,
+  setActiveUsers, // Ensure this is received
 }: Props) {
   const initialized = useRef(false);
 
   useEffect(() => {
-    if (!containerRef.current || initialized.current)
-      return;
+    if (!containerRef.current || initialized.current) return;
 
     const quill = new Quill(containerRef.current, {
       theme: "snow",
@@ -45,25 +39,35 @@ export default function useCollaborativeEditor({
     });
 
     const {
-    ydoc,
-    provider,
-    binding,
-    chatArray,
-    } = createCollaborationSession(
-    roomCode,
-    userName,
-    color,
-    quill
-    );
+      ydoc,
+      provider,
+      binding,
+      chatArray,
+    } = createCollaborationSession(roomCode, userName, color, quill);
 
-chatArrayRef.current = chatArray;
-
-
-    chatArrayRef.current = ydoc.getArray("chat");
-
+    // 1. Setup Chat Messaging
+    chatArrayRef.current = chatArray;
     chatArrayRef.current.observe(() => {
       setMessages(chatArrayRef.current.toArray());
     });
+
+    // 2. SETUP USER COUNTER / AWARENESS
+    const updateUsers = () => {
+      const states = provider.awareness!.getStates();
+      const users: ActiveUser[] = [];
+      states.forEach((state, clientId) => {
+        if (state.user) {
+          users.push({ id: clientId.toString(), ...state.user });
+        }
+      });
+      setActiveUsers(users);
+    };
+
+    // Attach listener for awareness changes
+    provider.awareness!.on("change", updateUsers);
+    
+    // Initial sync
+    updateUsers();
 
     initialized.current = true;
 
@@ -72,5 +76,5 @@ chatArrayRef.current = chatArray;
       provider.destroy();
       ydoc.destroy();
     };
-  }, []);
+  }, []); // Note: Keep dependencies minimal to avoid re-initialization
 }
