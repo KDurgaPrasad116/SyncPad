@@ -1,30 +1,74 @@
-.app-wrapper{
-    width:100%;
-    max-width:1200px;
-    margin:auto;
-    padding:2rem;
-    height:100dvh;
+/* Universal fix to prevent padding from breaking widths */
+* { box-sizing: border-box; }
 
-    display:flex;
-    flex-direction:column;
-
-    overflow:hidden;
+.app-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.slider-container{
-    display:flex;
-    gap:20px;
-
-    height:100%;
+/* Hide mobile tabs on desktop */
+.mobile-tabs { 
+    display: none; 
 }
 
-.panel{
-    height:560px;
+.slider-container {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+    width: 100%; /* Ensure this spans the full wrapper */
 }
+
+.panel {
+    height: 560px;
+}
+
+/* FIX: Tell the panels how to share the space side-by-side */
+.chat-panel { flex: 1; min-width: 300px; }
+.editor-panel { flex: 2; min-width: 0; }
+
 .editor-canvas {
     height: calc(100% - 60px);
     background: white;
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+/* ========================================= */
+/* MOBILE LAYOUT & SWIPE EFFECT              */
+/* ========================================= */
+@media (max-width: 768px) {
+  .app-wrapper { padding: 0; }
+  
+  /* Show the tabs only on mobile */
+  .mobile-tabs {
+    display: flex; justify-content: center; gap: 10px; padding: 10px;
+    background-color: #fff; border-bottom: 1px solid #ddd; z-index: 10;
+    width: 100%;
+  }
+  .mobile-tab-btn {
+    padding: 6px 16px; border-radius: 20px; border: 1px solid #007bff;
+    background: transparent; color: #007bff; font-weight: bold; cursor: pointer;
+  }
+  .mobile-tab-btn:active { background: #007bff; color: #fff; }
+
+  /* Turn the container into a swipable track */
+  .slider-container {
+    gap: 0; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; -webkit-overflow-scrolling: touch; width: 100%;
+  }
+  .slider-container::-webkit-scrollbar { display: none; }
+  .slider-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Make panels take exactly 100% of the screen width */
+  .panel {
+    flex: 0 0 100%; scroll-snap-align: center; padding: 15px; 
+    height: calc(100dvh - 55px); 
+  }
 }
