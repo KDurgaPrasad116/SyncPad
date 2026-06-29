@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Editor from "./components/Editor";
+import Editor from "./components/editor/Editor";
 
 export default function App() {
   const [accessCode, setAccessCode] = useState("");

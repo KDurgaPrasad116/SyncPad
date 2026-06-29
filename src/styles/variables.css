@@ -1,0 +1,12 @@
+:root{
+  --primary:#0078ff;
+  --danger:#dc3545;
+  --success:#28a745;
+
+  --background:#ffffff;
+  --surface:#f6f8fa;
+
+  --radius:12px;
+
+  --transition:0.2s ease;
+}

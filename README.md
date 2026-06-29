@@ -1,306 +1,317 @@
-# SyncPad
+# 🚀 SyncPad
 
-SyncPad is a real-time collaborative text editor built with React, TypeScript, Quill, Yjs, and Hocuspocus. It lets multiple users join the same workspace, edit together instantly, and see live cursor and presence updates with conflict-free synchronization powered by CRDTs.
+> A real-time collaborative workspace with live document editing, team chat, voice messaging, file sharing, and presence awareness.
 
-## Features
+![License](https://img.shields.io/badge/license-MIT-green)
+![React](https://img.shields.io/badge/React-19-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Yjs](https://img.shields.io/badge/Yjs-CRDT-success)
+![Hocuspocus](https://img.shields.io/badge/Hocuspocus-WebSocket-orange)
 
-- Real-time collaborative editing
-- Shared workspaces with join codes
-- Live cursor tracking
-- User presence with names and colors
-- Conflict-free synchronization with Yjs
-- Rich text editing with Quill
-- WebSocket-powered collaboration
-- Lightweight and responsive UI
-- Local-first support with IndexedDB sync
+---
 
-## Demo Flow
+## 📖 Overview
 
-1. Enter your display name.
-2. Enter a workspace code.
-3. Join the workspace.
-4. Share the code with others.
-5. Start editing together in real time.
+SyncPad is a collaborative workspace inspired by tools like Google Docs, Notion, and Slack.
 
-All connected users see text updates and cursor movement instantly.
+It allows multiple users to join a shared room where they can
 
-## Tech Stack
+- Edit documents simultaneously
+- Chat in real time
+- Share files
+- Record and send voice messages
+- See active collaborators and live cursors
+
+The synchronization engine is powered by **Yjs CRDTs**, making collaboration conflict-free without traditional locking.
+
+---
+
+## ✨ Features
+
+### 📝 Collaborative Rich Text Editor
+
+- Live document editing
+- Rich text formatting
+- Ordered/Bullet Lists
+- Cursor synchronization
+- Conflict-free editing (CRDT)
+
+---
+
+### 💬 Team Chat
+
+- Real-time messaging
+- Link preview support
+- Rich text rendering
+- Auto scrolling
+
+---
+
+### 🎤 Voice Messages
+
+- Record audio
+- Preview before sending
+- Playback inside chat
+
+---
+
+### 📂 File Sharing
+
+- Upload files
+- Download shared files
+- File size validation
+
+---
+
+### 👥 Presence System
+
+- Live online users
+- User colors
+- Cursor tracking
+- Active workspace members
+
+---
+
+### 📱 Mobile Friendly
+
+- Responsive layout
+- Swipe navigation
+- Mobile tabs
+
+---
+
+## 🏗 Tech Stack
 
 ### Frontend
+
 - React
 - TypeScript
 - Vite
+
+### Rich Text
+
 - Quill
+- Quill Cursors
 
 ### Collaboration
+
 - Yjs
-- y-quill
-- y-websocket
-- y-indexeddb
+- Hocuspocus
+
+### Styling
+
+- CSS
+- Responsive Design
 
 ### Backend
-- Hocuspocus Server
-- Hocuspocus Provider
-- WebSockets
 
-### Presence
-- Quill Cursors
-- Yjs Awareness API
+- Node.js
+- Express
+- WebSocket
 
-## Architecture
+---
 
-```text
-┌───────────────┐
-│ React + Quill │
-└───────┬───────┘
-        │
-        ▼
-┌───────────────┐
-│   Yjs CRDT    │
-└───────┬───────┘
-        │
-        ▼
-┌────────────────────┐
-│ Hocuspocus Server  │
-│ ws://localhost:1234│
-└───────┬────────────┘
-        │
-        ▼
-  Multiple connected clients
+## ⚙️ Architecture
+
+```
+                Client A
+                    │
+                    │
+        ┌───────────▼───────────┐
+        │    Hocuspocus Server  │
+        └───────────▲───────────┘
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+     Client B               Client C
 ```
 
-Yjs manages the shared document state using CRDTs, which allows multiple users to edit the same content without merge conflicts.
+All clients synchronize using Yjs CRDT documents through a Hocuspocus WebSocket server.
 
-## Project Structure
+---
+
+## 📂 Project Structure
 
 ```text
 SyncPad/
 ├── public/
-│   ├── favicon.svg
-│   └── icons.svg
+├── server/
 ├── src/
-│   ├── components/
-│   │   └── Editor.tsx
 │   ├── assets/
+│   ├── components/
+│   │   ├── audio/
+│   │   ├── chat/
+│   │   ├── editor/
+│   │   ├── layout/
+│   │   └── ui/
+│   ├── context/
+│   ├── hooks/
+│   ├── services/
+│   ├── styles/
+│   ├── types/
+│   ├── utils/
 │   ├── App.tsx
 │   └── main.tsx
-├── server.cjs
 ├── package.json
-├── vite.config.ts
 └── README.md
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## 🚀 Installation
 
-Make sure you have installed:
-
-- Node.js
-- npm
-
-### Clone the Repository
+Clone the repository
 
 ```bash
 git clone https://github.com/KDurgaPrasad116/SyncPad.git
+```
+
+Move inside the project
+
+```bash
 cd SyncPad
 ```
 
-### Install Dependencies
+Install dependencies
 
 ```bash
 npm install
 ```
 
-## Run Locally
-
-### 1. Start the collaboration server
-
-```bash
-node server.cjs
-```
-
-Expected output:
-
-```text
-🚀 Secure Signaling Backend running on ws://localhost:1234
-```
-
-### 2. Start the frontend
-
-Open a second terminal and run:
+Run frontend
 
 ```bash
 npm run dev
 ```
 
-Vite will start the app locally, usually at:
+Run backend
 
-```text
+```bash
+node server/server.cjs
+```
+
+Open
+
+```
 http://localhost:5173
 ```
 
-Open that URL in your browser.
+---
 
-## Available Scripts
+## 🛠 Usage
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Create a production build |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint checks |
+1. Start the backend
+2. Start the frontend
+3. Enter your username
+4. Create or join a room
+5. Start collaborating instantly
 
-## Dependencies
+---
 
-| Package | Purpose |
-|---------|---------|
-| `react` | UI framework |
-| `react-dom` | React rendering |
-| `quill` | Rich text editor |
-| `yjs` | CRDT-based synchronization |
-| `y-quill` | Quill and Yjs binding |
-| `@hocuspocus/provider` | Realtime collaboration provider |
-| `@hocuspocus/server` | Collaboration backend |
-| `quill-cursors` | Live cursor rendering |
-| `ws` | WebSocket support |
+## 🔄 How Collaboration Works
 
-## How It Works
+1. User edits Quill document
+2. Quill updates Yjs document
+3. Yjs generates CRDT updates
+4. Hocuspocus broadcasts updates
+5. Other clients receive updates
+6. Their editors update instantly
 
-### Workspace Rooms
+No manual synchronization is required.
 
-Each collaborative session is identified by a room name based on the workspace code:
+---
 
-```ts
-name: `secure-workspace-${roomCode}`
-```
+## 📡 Real-Time Features
 
-Users who join with the same workspace code connect to the same shared document.
+✔ Live document editing
 
-### Presence and Awareness
+✔ Live chat
 
-Each connected user shares metadata like this:
+✔ Live cursors
 
-```ts
-{
-  name: userName,
-  color: myColor
-}
-```
+✔ Active users
 
-This powers live cursor indicators and active-user presence in the editor.
+✔ Voice messages
 
-### Live Synchronization
+✔ File sharing
 
-SyncPad combines:
+---
 
-- Quill editor events
-- Yjs CRDT updates
-- Hocuspocus WebSocket transport
+## 📈 Performance
 
-This setup keeps every connected client in sync while avoiding manual merge handling.
+- Conflict-free synchronization
+- Efficient CRDT updates
+- Minimal network traffic
+- Low latency collaboration
 
-## Configuration
+---
 
-### WebSocket Endpoint
+## 🛣 Roadmap
 
-Current development configuration:
+- [ ] Authentication
+- [ ] Room permissions
+- [ ] Dark mode
+- [ ] Emoji reactions
+- [ ] Collaborative drawing board
+- [ ] Markdown support
+- [ ] Image upload
+- [ ] Notifications
+- [ ] Video calls
+- [ ] Database persistence
+- [ ] Offline support
 
-```ts
-url: "ws://localhost:1234"
-```
+---
 
-For production, replace it with your deployed secure endpoint:
+## 🤝 Contributing
 
-```ts
-url: "wss://your-domain.com"
-```
+Contributions are welcome.
 
-## Screenshots
-
-Add screenshots or GIFs here to show the join screen and collaborative editor.
-
-Example:
-
-```md
-
-
-```
-
-## Future Improvements
-
-- Authentication and user accounts
-- Workspace invitations
-- Database-backed document persistence
-- End-to-end encryption
-- Rich text extensions
-- File uploads
-- Version history
-- Comments and annotations
-- Dark mode
-- User avatars
-
-## Troubleshooting
-
-### Cannot connect to workspace
-
-Make sure the backend server is running:
+1. Fork the repository
+2. Create a feature branch
 
 ```bash
-node server.cjs
+git checkout -b feature/my-feature
 ```
 
-### WebSocket connection failed
+3. Commit changes
 
-Check that this endpoint is reachable:
-
-```text
-ws://localhost:1234
+```bash
+git commit -m "Add amazing feature"
 ```
 
-Also verify that no firewall or port conflict is blocking the connection.
+4. Push branch
 
-### Collaborators cannot see updates
+```bash
+git push origin feature/my-feature
+```
 
-Check the following:
+5. Open a Pull Request
 
-- Both users joined the same workspace code.
-- The backend server is running.
-- The browser console shows no WebSocket or provider errors.
-
-## Development Notes
-
-SyncPad initializes the collaboration layer in this order:
-
-1. Quill editor
-2. Yjs document
-3. Hocuspocus provider
-4. Quill-Yjs binding
-
-This creates a shared editing environment with synchronized document state and collaborative presence.
-
-## Author
-
-**Durga Prasad**
-
-- GitHub: [KDurgaPrasad116](https://github.com/KDurgaPrasad116)
-
-## License
-
-This project does not currently include a license.
-
-If you want to make it open source, add an MIT license in a separate `LICENSE` file.
-
-## Acknowledgements
-
-Built with:
-
-- Yjs
-- Hocuspocus
-- Quill
-- React
-- Vite
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License.
+
+See the LICENSE file for details.
+
+---
+
+## 👨‍💻 Author
+
+**K Durga Prasad**
+
+GitHub
+
+https://github.com/KDurgaPrasad116
+
+---
+
+## 🙏 Acknowledgements
+
+- React
+- Yjs
+- Hocuspocus
+- Quill
+- TypeScript
+- Vite

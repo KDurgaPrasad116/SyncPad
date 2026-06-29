@@ -1,0 +1,30 @@
+.app-wrapper{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:2rem;
+    height:100dvh;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+}
+
+.slider-container{
+    display:flex;
+    gap:20px;
+
+    height:100%;
+}
+
+.panel{
+    height:560px;
+}
+.editor-canvas {
+    height: calc(100% - 60px);
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
